@@ -1,0 +1,121 @@
+﻿version: '3.9'
+
+networks:
+  micro-services:
+
+services:
+  catalogapi:
+    image: catalogapi
+    container_name: catalog-api
+    build:
+      context: .
+      dockerfile: CatalogAPI/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=5001
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    depends_on: 
+      - catalog.db
+      - microservice-mq
+    networks: 
+      - micro-services
+  
+  inventoryapi:
+    image: inventoryapi
+    container_name: inventory-api
+    build:
+      context: .
+      dockerfile: InventoryAPI/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=5001
+    ports:
+      - "5002:5000"
+      - "5003:5001"
+    depends_on:
+      - inventory.db
+      - microservice-mq
+    networks:
+      - micro-services
+
+  orderapi:
+    image: orderapi
+    container_name: order-api
+    build:
+      context: .
+      dockerfile: OrdersAPI/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=5001
+    ports:
+      - "5004:5000"
+      - "5005:5001"
+    depends_on:
+      - orders.db
+      - microservice-mq
+    networks:
+      - micro-services
+  
+  catalog.db:
+    image: postgres:latest
+    container_name: catalog.db
+    restart: always
+    environment:
+      POSTGRES_USER: "catalog"
+      POSTGRES_PASSWORD: "catalog"
+      POSTGRES_DB: "catalog_db"
+    volumes:
+      - ./.containers/catalog-db:/var/lib/postgresql/data
+    networks:
+      - micro-services
+
+  orders.db:
+    image: postgres:latest
+    container_name: orders.db
+    restart: always
+    environment:
+      POSTGRES_USER: "orders"
+      POSTGRES_PASSWORD: "orders"
+      POSTGRES_DB: "orders_db"
+    volumes:
+      - ./.containers/orders-db:/var/lib/postgresql/data
+    networks:
+      - micro-services
+
+  inventory.db:
+    image: postgres:latest
+    container_name: inventory.db
+    restart: always
+    environment:
+      POSTGRES_USER: "inventory"
+      POSTGRES_PASSWORD: "inventory"
+      POSTGRES_DB: "inventory_db"
+    volumes:
+      - ./.containers/inventory-db:/var/lib/postgresql/data
+    networks:
+      - micro-services
+      
+  microservice-mq:
+    image: rabbitmq:management
+    container_name: microservice-mq
+    hostname: microservice-mq
+    ports:
+      - "5672:5672"
+    volumes:
+      - ./.containers/queues/data/:/var/lib/rabbitmq
+      - ./.containers/queues/log/:/var/log/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+
+    networks:
+      - micro-services
+
