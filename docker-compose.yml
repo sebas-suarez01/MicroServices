@@ -4,7 +4,7 @@ networks:
   micro-services:
 
 services:
-  catalogapi:
+  catalog.api:
     image: catalogapi
     container_name: catalog-api
     build:
@@ -15,16 +15,16 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=5000
       - ASPNETCORE_HTTPS_PORTS=5001
-    ports:
-      - "5000:5000"
-      - "5001:5001"
+#    ports:
+#      - "5000:5000"
+#      - "5001:5001"
     depends_on: 
       - catalog.db
       - microservice-mq
     networks: 
       - micro-services
   
-  inventoryapi:
+  inventory.api:
     image: inventoryapi
     container_name: inventory-api
     build:
@@ -35,16 +35,16 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=5000
       - ASPNETCORE_HTTPS_PORTS=5001
-    ports:
-      - "5002:5000"
-      - "5003:5001"
+#    ports:
+#      - "5002:5000"
+#      - "5003:5001"
     depends_on:
       - inventory.db
       - microservice-mq
     networks:
       - micro-services
 
-  orderapi:
+  orders.api:
     image: orderapi
     container_name: order-api
     build:
@@ -55,9 +55,9 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=5000
       - ASPNETCORE_HTTPS_PORTS=5001
-    ports:
-      - "5004:5000"
-      - "5005:5001"
+#    ports:
+#      - "5004:5000"
+#      - "5005:5001"
     depends_on:
       - orders.db
       - microservice-mq
@@ -119,3 +119,19 @@ services:
     networks:
       - micro-services
 
+  api-gateway:
+    image: api-gateway
+    container_name: api-gateway
+    build:
+      context: .
+      dockerfile: API-Gateway/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=5001
+    ports:
+      - "8001:5000"
+      - "8002:5001"
+    networks:
+      - micro-services

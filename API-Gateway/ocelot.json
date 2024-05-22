@@ -1,0 +1,40 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/catalog",
+      "UpstreamHttpMethod": ["Get"],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "catalog.api",
+          "Port": 5000
+        }
+      ],
+      "DownstreamPathTemplate": "/catalog"
+    },
+    {
+      "UpstreamPathTemplate": "/api/inventory",
+      "UpstreamHttpMethod": ["Get", "Post"],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "inventory.api",
+          "Port": 5000
+        }
+      ],
+      "DownstreamPathTemplate": "/inventory"
+    },
+    {
+      "UpstreamPathTemplate": "/api/orders",
+      "UpstreamHttpMethod": ["Get", "Post"],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "orders.api",
+          "Port": 5000
+        }
+      ],
+      "DownstreamPathTemplate": "/orders"
+    }
+  ]
+}
