@@ -1,5 +1,6 @@
 using InventoryAPI.Common;
 using InventoryAPI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryAPI.Endpoints;
@@ -19,6 +20,8 @@ public static class InventoryEndpoints
         var bookId = await service.AddBook(request);
         return Results.Ok(bookId);
     }
+    
+    [Authorize]
     public static async Task<IResult> GetAll(IInventoryService service)
     {
         var books = await service.GetAll();

@@ -64,10 +64,26 @@ services:
     networks:
       - micro-services
   
+  auth.api:
+    image: authapi
+    container_name: auth-api
+    build:
+      context: .
+      dockerfile: AuthenticationAPI/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=5001
+    #    ports:
+    #      - "5004:5000"
+    #      - "5005:5001" 
+    networks:
+      - micro-services
+  
   catalog.db:
-    image: postgres:latest
+    image: postgres:16
     container_name: catalog.db
-    restart: always
     environment:
       POSTGRES_USER: "catalog"
       POSTGRES_PASSWORD: "catalog"
@@ -78,9 +94,8 @@ services:
       - micro-services
 
   orders.db:
-    image: postgres:latest
+    image: postgres:16
     container_name: orders.db
-    restart: always
     environment:
       POSTGRES_USER: "orders"
       POSTGRES_PASSWORD: "orders"
@@ -91,9 +106,8 @@ services:
       - micro-services
 
   inventory.db:
-    image: postgres:latest
+    image: postgres:16
     container_name: inventory.db
-    restart: always
     environment:
       POSTGRES_USER: "inventory"
       POSTGRES_PASSWORD: "inventory"
