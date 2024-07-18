@@ -34,7 +34,14 @@
           "Port": 5000
         }
       ],
-      "DownstreamPathTemplate": "/inventory"
+      "DownstreamPathTemplate": "/inventory",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Administrator"
+      }
     },
     {
       "UpstreamPathTemplate": "/api/orders",

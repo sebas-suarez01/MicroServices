@@ -38,7 +38,7 @@ public class JwtTokenHandler
         var claimsIdentity = new ClaimsIdentity(new List<Claim>()
         {
             new Claim(JwtRegisteredClaimNames.Name, userAccount.Username),
-            new Claim(ClaimTypes.Role, userAccount.Role)
+            new Claim("Role", userAccount.Role)
         });
 
         var signingCredentials =
