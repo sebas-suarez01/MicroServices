@@ -11,7 +11,7 @@ Represents a pseudo-ecommerce of books
 - AuthenticationAPI: Implements authentication and authorization for the others services
 - API-Gateway
 
-Each service has its own postgres database.
+Each service has its own postgres database.\
 RabbitMQ is used for the communication and consistency of data between services
 to keep consistency of the data is through messages/events
 
