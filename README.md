@@ -13,7 +13,7 @@ Represents a pseudo-ecommerce of books
 
 Each service has its own postgres database.
 RabbitMQ is used for the communication and consistency of data between services
-To keep consistency of the data is through messages/events
+to keep consistency of the data is through messages/events
 
 ### Structure
 ![img.png](./images/img.png)
